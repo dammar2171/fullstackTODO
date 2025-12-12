@@ -9,10 +9,26 @@ function App() {
   const [showTodo, setShowTodo] = useState(false);
   const [todo, setTodo] = useState([]);
 
+  const updateTodo = (id, updatedItem) => {
+    setTodo((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...updatedItem } : item))
+    );
+  };
+
+  const deleteTodo = (id) => {
+    const okay = confirm("Are you sure");
+    if (okay) {
+      const newTodo = todo.filter((todo) => todo.id !== id);
+      setTodo(newTodo);
+    }
+  };
+
   return (
     <>
       <TodoContainer setShowTodo={setShowTodo} setTodo={setTodo} />
-      {showTodo && <ShowTodo todo={todo} />}
+      {showTodo && (
+        <ShowTodo todo={todo} updateTodo={updateTodo} deleteTodo={deleteTodo} />
+      )}
     </>
   );
 }
