@@ -1,18 +1,23 @@
 import { useRef } from "react";
+import axios from "axios";
 
-function TodoContainer({ setShowTodo, setTodo }) {
+function TodoContainer({ setShowTodo }) {
   const taskElement = useRef();
   const dateElement = useRef();
 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     e.preventDefault();
     const task = taskElement.current.value;
     const date = dateElement.current.value;
-    const id = Date.now();
 
-    setTodo((prev) => [...prev, { id, task, date }]);
-    alert("Data submited sucessfully");
+    const data = { task, date };
 
+    try {
+      await axios.post("http://localhost:5000/todo/insert", data);
+      alert("Data submited sucessfully");
+    } catch (error) {
+      console.log("ERROR:", error);
+    }
     taskElement.current.value = "";
     dateElement.current.value = "";
   };

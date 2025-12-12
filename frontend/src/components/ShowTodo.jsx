@@ -39,7 +39,7 @@ function ShowTodo({ todo, updateTodo, deleteTodo }) {
                         <tr key={item.id}>
                           <td>{item.id}</td>
                           <td>{item.task}</td>
-                          <td>{item.date}</td>
+                          <td>{new Date(item.date).toLocaleDateString()}</td>
                           <td>
                             <button
                               onClick={() => handleEditData(item)}
