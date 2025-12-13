@@ -13,9 +13,8 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 function App() {
   const [showTodo, setShowTodo] = useState(false);
   const [todo, setTodo] = useState([]);
-  const [loginUser, setLoginUser] = useState({});
-  const [signupUser, setSignupUser] = useState({});
   const [autenticated, setAutenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   const updateTodo = async (id, updatedItem) => {
     const { task, date } = updatedItem;
@@ -58,24 +57,26 @@ function App() {
     fetchTodos();
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) setAutenticated(true);
+    setCheckingAuth(false);
+  }, []);
+
   return (
     <Router>
       <Routes>
         <Route
           path="/"
-          element={
-            <Authentication
-              setSignupUser={setSignupUser}
-              setLoginUser={setLoginUser}
-              signupUser={signupUser}
-              setAutenticated={setAutenticated}
-            />
-          }
+          element={<Authentication setAutenticated={setAutenticated} />}
         />
         <Route
           path="/todo"
           element={
-            <ProtectedRoutes autenticated={autenticated}>
+            <ProtectedRoutes
+              autenticated={autenticated}
+              checkingAuth={checkingAuth}
+            >
               <TodoContainer setShowTodo={setShowTodo} setTodo={setTodo} />
               {showTodo && (
                 <ShowTodo

@@ -1,12 +1,8 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Signup = ({
-  setSignupUser,
-  setLoginUser,
-  signupUser,
-  setAutenticated,
-}) => {
+const Signup = ({ setAutenticated }) => {
   const fullnameRef = useRef();
   const emailRef = useRef();
   const numberRef = useRef();
@@ -19,7 +15,7 @@ const Signup = ({
 
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     const fullname = fullnameRef.current.value;
     const email = emailRef.current.value;
@@ -28,33 +24,39 @@ const Signup = ({
     const confirmPassword = confirmPsdRef.current.value;
 
     if (password == confirmPassword) {
-      setSignupUser({ fullname, email, number, password });
+      try {
+        await axios.post("http://localhost:5000/signup/insertUser", {
+          fullname,
+          email,
+          number,
+          password,
+        });
+      } catch (error) {
+        console.log("ERROR:", error);
+      }
       alert("data saved sucessfully");
+      fullnameRef.current.value = "";
+      emailRef.current.value = "";
+      numberRef.current.value = "";
+      psdRef.current.value = "";
+      confirmPsdRef.current.value = "";
     } else {
       alert("password and confirm password not matched!!");
     }
-    fullnameRef.current.value = "";
-    emailRef.current.value = "";
-    numberRef.current.value = "";
-    psdRef.current.value = "";
-    confirmPsdRef.current.value = "";
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const { email, password } = signupUser;
-    console.log(signupUser);
-
-    console.log(email, password);
-
     const loginEmail = loginEmailRef.current.value;
     const loginpsd = loginPsdRef.current.value;
 
-    if (email === loginEmail && password === loginpsd) {
-      setAutenticated(true);
-      alert("loged in sucessfully");
-      navigate("/todo");
-      setLoginUser({ loginEmail, loginpsd });
-    }
+    const res = await axios.post("http://localhost:5000/signup/loginUser", {
+      email: loginEmail,
+      password: loginpsd,
+    });
+
+    localStorage.setItem("token", res.data.token);
+    setAutenticated(true);
+    navigate("/todo");
 
     loginEmailRef.current.value = "";
     loginPsdRef.current.value = "";
