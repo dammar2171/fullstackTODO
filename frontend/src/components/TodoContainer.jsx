@@ -1,9 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function TodoContainer({ setShowTodo }) {
+  const navigate = useNavigate();
   const taskElement = useRef();
   const dateElement = useRef();
+
+  const [user, setUser] = useState({});
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -24,10 +29,32 @@ function TodoContainer({ setShowTodo }) {
   const handleHideData = () => {
     setShowTodo(false);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUser(decoded);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
-    <div className="container-fluid">
+    <div className="container-fluid pt-5">
       <div className="container">
-        <h1 className="text-center mt-4">TODO APP</h1>
+        <h1 className="text-center">
+          Welcome to TODO APP {user.name}{" "}
+          <span>
+            <button onClick={handleLogout} className="btn btn-primary">
+              Logout
+            </button>
+          </span>
+        </h1>
         <div className="row">
           <div className="col-2"></div>
           <div className="col-8">

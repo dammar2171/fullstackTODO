@@ -53,7 +53,6 @@ const Signup = ({ setAutenticated }) => {
       email: loginEmail,
       password: loginpsd,
     });
-
     localStorage.setItem("token", res.data.token);
     setAutenticated(true);
     navigate("/todo");
