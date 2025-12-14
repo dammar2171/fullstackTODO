@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TodoContext } from "../store/TodoContext";
 
-function ShowTodo({ todo, updateTodo, deleteTodo }) {
+function ShowTodo() {
+  const { todo, updateTodo, deleteTodo } = useContext(TodoContext);
   const [id, setId] = useState(null);
   const [tsk, setTsk] = useState("");
   const [date, setDate] = useState("");

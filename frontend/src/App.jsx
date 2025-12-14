@@ -3,94 +3,38 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import TodoContainer from "./components/TodoContainer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
-import ShowTodo from "./components/ShowTodo";
-import { useEffect } from "react";
-import axios from "axios";
+import ShowTodo from "../src/components/ShowTodo";
 import Authentication from "./components/Authentication";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import TodoContextProvider, { TodoContext } from "./store/TodoContext";
+import { useContext } from "react";
 
-function App() {
-  const [showTodo, setShowTodo] = useState(false);
-  const [todo, setTodo] = useState([]);
-  const [autenticated, setAutenticated] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-
-  const updateTodo = async (id, updatedItem) => {
-    const { task, date } = updatedItem;
-    try {
-      await axios.put(`http://localhost:5000/todo/updateTodo/${id}`, {
-        task,
-        date,
-      });
-    } catch (error) {
-      console.log("ERROR:", error);
-    }
-    setTodo((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updatedItem } : item))
-    );
-  };
-
-  const deleteTodo = async (id) => {
-    const okay = confirm("Are you sure");
-    if (okay) {
-      try {
-        await axios.delete(`http://localhost:5000/todo/deleteTodo/${id}`);
-      } catch (error) {
-        console.log("ERROR:", error);
-      }
-      const newTodo = todo.filter((item) => item.id !== id);
-      setTodo(newTodo);
-    }
-  };
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/todo/getTodo");
-        setTodo(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchTodos();
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) setAutenticated(true);
-    setCheckingAuth(false);
-  }, []);
-
+export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={<Authentication setAutenticated={setAutenticated} />}
-        />
-        <Route
-          path="/todo"
-          element={
-            <ProtectedRoutes
-              autenticated={autenticated}
-              checkingAuth={checkingAuth}
-            >
-              <TodoContainer setShowTodo={setShowTodo} setTodo={setTodo} />
-              {showTodo && (
-                <ShowTodo
-                  todo={todo}
-                  updateTodo={updateTodo}
-                  deleteTodo={deleteTodo}
-                />
-              )}{" "}
-            </ProtectedRoutes>
-          }
-        />
-      </Routes>
-    </Router>
+    <TodoContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Authentication />} />
+          <Route
+            path="/todo"
+            element={
+              <ProtectedRoutes>
+                <TodoWrapper />
+              </ProtectedRoutes>
+            }
+          />
+        </Routes>
+      </Router>
+    </TodoContextProvider>
   );
 }
 
-export default App;
+const TodoWrapper = () => {
+  const { showTodo } = useContext(TodoContext);
+  return (
+    <>
+      <TodoContainer />
+      {showTodo && <ShowTodo />}
+    </>
+  );
+};

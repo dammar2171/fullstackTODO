@@ -1,9 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { TodoContext } from "../store/TodoContext";
 
-function TodoContainer({ setShowTodo }) {
+function TodoContainer() {
+  const { setShowTodo } = useContext(TodoContext);
   const navigate = useNavigate();
   const taskElement = useRef();
   const dateElement = useRef();

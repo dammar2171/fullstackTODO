@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { TodoContext } from "../store/TodoContext";
 
-const Signup = ({ setAutenticated }) => {
+const Signup = () => {
+  const { setAutenticated } = useContext(TodoContext);
   const fullnameRef = useRef();
   const emailRef = useRef();
   const numberRef = useRef();
