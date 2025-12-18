@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { TodoContext } from "../store/TodoContext";
+import "../css/ShowTodo.css";
 
 function ShowTodo() {
   const { todo, updateTodo, deleteTodo } = useContext(TodoContext);
@@ -20,23 +21,27 @@ function ShowTodo() {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="container-fluid todo-page">
         <div className="container">
           <div className="row">
             <div className="col-2"></div>
+
             <div className="col-8">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Task</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                {todo.length > 0 ? (
+              <div className="todo-card">
+                <h3 className="todo-title">My Todos</h3>
+
+                <table className="table todo-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Task</th>
+                      <th>Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
                   <tbody>
-                    {Array.isArray(todo) &&
+                    {Array.isArray(todo) && todo.length > 0 ? (
                       todo.map((item) => (
                         <tr key={item.id}>
                           <td>{item.id}</td>
@@ -44,53 +49,73 @@ function ShowTodo() {
                           <td>{new Date(item.date).toLocaleDateString()}</td>
                           <td>
                             <button
+                              className="btn btn-primary btn-sm me-2"
                               onClick={() => handleEditData(item)}
-                              className="btn btn-primary"
                               data-bs-toggle="modal"
                               data-bs-target="#editModal"
                             >
                               Edit
                             </button>
+
                             <button
-                              className="btn btn-danger"
+                              className="btn btn-danger btn-sm"
                               onClick={() => deleteTodo(item.id)}
                             >
                               Delete
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="4" className="empty-text">
+                          No todo is added yet!
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
-                ) : (
-                  <tbody>
-                    <tr>
-                      <td colSpan={4}>No todo is added yet!</td>
-                    </tr>
-                  </tbody>
-                )}
-              </table>
+                </table>
+              </div>
             </div>
+
             <div className="col-2"></div>
           </div>
         </div>
       </div>
-      {/* edit modal */}
-      <div className="modal fade" id="editModal" tabIndex={-1}>
-        <div className="modal-dialog">
-          <div className="modal-content">
+
+      {/* Edit Modal */}
+      <div className="modal fade" id="editModal" tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content todo-modal">
+            <div className="modal-header">
+              <h5 className="modal-title">Edit Todo</h5>
+              <button
+                type="button"
+                className="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+
             <div className="modal-body">
               <form onSubmit={handleEditForm}>
                 <input
                   type="text"
+                  className="form-control mb-3"
                   value={tsk}
                   onChange={(e) => setTsk(e.target.value)}
+                  placeholder="Task"
                 />
+
                 <input
                   type="date"
+                  className="form-control mb-3"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                 />
-                <input type="submit" value="Update" />
+
+                <button type="submit" className="btn btn-primary w-100">
+                  Update Todo
+                </button>
               </form>
             </div>
           </div>

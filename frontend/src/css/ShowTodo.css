@@ -1,0 +1,96 @@
+.todo-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+  padding-top: 60px;
+}
+
+.todo-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow:
+    0 0 30px rgba(0, 234, 255, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.todo-title {
+  text-align: center;
+  color: #00eaff;
+  margin-bottom: 25px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 12px rgba(0, 234, 255, 0.6);
+}
+
+/* Table */
+.todo-table {
+  color: #ffffff;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.todo-table thead th {
+  color: #00eaff;
+  border: none;
+}
+
+.todo-table tbody tr {
+  background: rgba(255, 255, 255, 0.12);
+  transition: 0.3s ease;
+}
+
+.todo-table tbody tr:hover {
+  background: rgba(0, 234, 255, 0.18);
+  transform: scale(1.01);
+}
+
+.todo-table td {
+  border: none;
+  vertical-align: middle;
+}
+
+/* Empty text */
+.empty-text {
+  text-align: center;
+  color: #ccc;
+  font-style: italic;
+}
+
+.todo-modal {
+  background: rgba(15, 32, 39, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 234, 255, 0.25);
+  box-shadow: 0 0 30px rgba(0, 234, 255, 0.3);
+}
+
+.modal-title {
+  color: #00eaff;
+}
+
+.modal-body .form-control {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.modal-body .form-control:focus {
+  border-color: #00eaff;
+  box-shadow: 0 0 12px rgba(0, 234, 255, 0.8);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00eaff, #007bff);
+  border: none;
+  color: #000;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.9);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ff4b5c, #ff1e3c);
+  border: none;
+}

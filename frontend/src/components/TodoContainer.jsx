@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { TodoContext } from "../store/TodoContext";
 
 function TodoContainer() {
-  const { setShowTodo } = useContext(TodoContext);
+  const { setShowTodo, setTodo } = useContext(TodoContext);
   const navigate = useNavigate();
   const taskElement = useRef();
   const dateElement = useRef();
@@ -17,17 +17,27 @@ function TodoContainer() {
     const task = taskElement.current.value;
     const date = dateElement.current.value;
 
-    const data = { task, date };
+    const token = localStorage.getItem("token");
 
     try {
-      await axios.post("http://localhost:5000/todo/insert", data);
-      alert("Data submited sucessfully");
+      await axios.post(
+        "http://localhost:5000/todo/insert",
+        { task, date },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Data submitted successfully");
     } catch (error) {
       console.log("ERROR:", error);
     }
+
     taskElement.current.value = "";
     dateElement.current.value = "";
   };
+
   const handleHideData = () => {
     setShowTodo(false);
   };
@@ -43,6 +53,8 @@ function TodoContainer() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setShowTodo(false);
+    setTodo([]);
     navigate("/");
   };
 
