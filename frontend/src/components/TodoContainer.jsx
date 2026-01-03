@@ -105,13 +105,13 @@ function TodoContainer() {
                 onClick={() => setShowTodo(true)}
                 className="form-control bg-success"
               >
-                View Data
+                View Todo
               </button>
               <button
                 onClick={handleHideData}
                 className="form-control bg-secondary"
               >
-                Hide Data
+                Hide Todo
               </button>
             </div>
           </div>
